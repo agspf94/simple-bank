@@ -13,6 +13,9 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
 import org.springframework.context.annotation.Import
 import org.springframework.test.context.ActiveProfiles
+import org.springframework.test.context.jdbc.Sql
+import org.springframework.test.context.jdbc.Sql.ExecutionPhase
+import org.springframework.test.context.jdbc.SqlGroup
 import org.springframework.test.context.junit.jupiter.SpringExtension
 
 @ExtendWith(SpringExtension::class)
@@ -20,6 +23,10 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 @Import(value = [CustomerApiClientMockStarter::class])
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
+@SqlGroup(
+    Sql("classpath:scripts/data.sql", executionPhase = ExecutionPhase.BEFORE_TEST_METHOD),
+    Sql("classpath:scripts/reset.sql", executionPhase = ExecutionPhase.AFTER_TEST_METHOD)
+)
 abstract class AbstractComponentTest {
     protected lateinit var wireMockServer: WireMockServer
 
@@ -36,13 +43,10 @@ abstract class AbstractComponentTest {
         wireMockServer.stop()
     }
 
-    abstract fun setupMocks()
-
     @BeforeEach
     fun setup() {
         if (!wireMockServer.isRunning) {
             wireMockServer.start()
         }
-        setupMocks()
     }
 }

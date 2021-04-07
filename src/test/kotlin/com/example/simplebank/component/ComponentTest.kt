@@ -1,7 +1,6 @@
 package com.example.simplebank.component
 
 import com.example.simplebank.controller.request.BankRequest
-import com.example.simplebank.entity.Bank
 import com.example.simplebank.mock.CustomerApiClientMockStarter
 import com.example.simplebank.repository.BankRepository
 import com.example.simplebank.service.request.DeleteRequest
@@ -26,17 +25,6 @@ class ComponentTest : AbstractComponentTest() {
 
     @Autowired
     private lateinit var customerApiClientMockStater: CustomerApiClientMockStarter
-
-    @BeforeEach
-    override fun setupMocks() {
-        bankRepository.deleteAll()
-        val banks = mutableListOf<Bank>()
-        banks.add(Bank(1, 1, 100.0, 1))
-        banks.add(Bank(2, 2, 100.0, 2))
-        banks.add(Bank(3, 3, 100.0, 3))
-        banks.add(Bank(4, 4, 100.0, 4))
-        bankRepository.saveAll(banks)
-    }
 
     @Nested
     @DisplayName("Getting all banks")
