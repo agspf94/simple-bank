@@ -25,9 +25,11 @@ import org.mockito.*
 import org.mockito.Mockito.*
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.test.context.ActiveProfiles
 import java.util.HashMap
 
 @ExtendWith(MockitoExtension::class)
+@ActiveProfiles("test")
 class BankServiceTest {
     @InjectMocks
     private lateinit var bankService: BankService

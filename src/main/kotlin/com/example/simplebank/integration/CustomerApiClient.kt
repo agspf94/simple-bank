@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import javax.validation.Valid
 
-@FeignClient(url = "\${feign.url}", name = "customer-api-client")
+@FeignClient(url = "\${feign.client.config.customerApiClient.url}", name = "customer-api-client")
 interface CustomerApiClient {
     @GetMapping
     fun findAll(): List<Customer>

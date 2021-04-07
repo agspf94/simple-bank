@@ -12,12 +12,14 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
 import org.springframework.context.annotation.Import
+import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.junit.jupiter.SpringExtension
 
 @ExtendWith(SpringExtension::class)
 @SpringBootTest(classes = [SimpleBankApplication::class], webEnvironment = WebEnvironment.RANDOM_PORT)
 @Import(value = [CustomerApiClientMockStarter::class])
 @AutoConfigureMockMvc
+@ActiveProfiles("test")
 abstract class AbstractComponentTest {
     protected lateinit var wireMockServer: WireMockServer
 
