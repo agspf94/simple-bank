@@ -42,6 +42,18 @@ dependencies {
 
     // Liquibase
     implementation("org.liquibase:liquibase-core:4.3.1")
+
+    // Feign
+    implementation("org.springframework.cloud:spring-cloud-starter-openfeign:3.0.2")
+
+    // Validation
+    implementation("org.springframework.boot:spring-boot-starter-validation:2.4.4")
+
+    // Mockito
+    testImplementation("org.mockito:mockito-core:3.8.0")
+
+    // WireMock
+    testImplementation("com.github.tomakehurst:wiremock-standalone:2.27.2")
 }
 
 tasks.withType<KotlinCompile> {
