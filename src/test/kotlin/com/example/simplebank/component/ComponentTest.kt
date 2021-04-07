@@ -63,7 +63,7 @@ class ComponentTest : AbstractComponentTest() {
     inner class GetBank {
         @Test
         fun `should get a bank successfully`() {
-            customerApiClientMockStater.stubForGet(
+            customerApiClientMockStater.stubForFindCustomerById(
                 wireMockServer,
                 "1",
                 200,
@@ -86,7 +86,7 @@ class ComponentTest : AbstractComponentTest() {
 
         @Test
         fun `should not get a bank because customer was not found on Bank API`() {
-            customerApiClientMockStater.stubForGet(
+            customerApiClientMockStater.stubForFindCustomerById(
                 wireMockServer,
                 "5",
                 200,
@@ -105,7 +105,7 @@ class ComponentTest : AbstractComponentTest() {
 
         @Test
         fun `should not get a bank because customer was not found on Customer API`() {
-            customerApiClientMockStater.stubForGet(
+            customerApiClientMockStater.stubForFindCustomerById(
                 wireMockServer,
                 "5",
                 404,
@@ -128,7 +128,7 @@ class ComponentTest : AbstractComponentTest() {
     inner class AddBank {
         @Test
         fun `should add a new bank successfully`() {
-            customerApiClientMockStater.stubForGet(
+            customerApiClientMockStater.stubForFindCustomerById(
                 wireMockServer,
                 "5",
                 200,
@@ -153,7 +153,7 @@ class ComponentTest : AbstractComponentTest() {
 
         @Test
         fun `should not add a new bank because customer doesnt exist on Customer API`() {
-            customerApiClientMockStater.stubForGet(
+            customerApiClientMockStater.stubForFindCustomerById(
                 wireMockServer,
                 "5",
                 404,
@@ -169,11 +169,12 @@ class ComponentTest : AbstractComponentTest() {
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isNotFound)
+                .andExpect(jsonPath("$.cause.message").value("The given customer (Customer ID: ${request.customerId}) was not found on Customer API"))
         }
 
         @Test
         fun `should not add a new bank because this bank already exists`() {
-            customerApiClientMockStater.stubForGet(
+            customerApiClientMockStater.stubForFindCustomerById(
                 wireMockServer,
                 "1",
                 200,
@@ -189,6 +190,7 @@ class ComponentTest : AbstractComponentTest() {
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest)
+                .andExpect(jsonPath("$.cause.message").value("The given customer (Customer ID: ${request.customerId}) already exists on Bank API"))
         }
     }
 
@@ -197,7 +199,7 @@ class ComponentTest : AbstractComponentTest() {
     inner class UpdateBank {
         @Test
         fun `should update a bank successfully`() {
-            customerApiClientMockStater.stubForGet(
+            customerApiClientMockStater.stubForFindCustomerById(
                 wireMockServer,
                 "1",
                 200,
@@ -222,7 +224,7 @@ class ComponentTest : AbstractComponentTest() {
 
         @Test
         fun `should not update a bank because the customer was not found on Customer API`() {
-            customerApiClientMockStater.stubForGet(
+            customerApiClientMockStater.stubForFindCustomerById(
                 wireMockServer,
                 "5",
                 404,
@@ -238,11 +240,12 @@ class ComponentTest : AbstractComponentTest() {
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isNotFound)
+                .andExpect(jsonPath("$.cause.message").value("The given customer (Customer ID: ${request.customerId}) was not found on Customer API"))
         }
 
         @Test
         fun `should not update a bank because the customer was not found on Bank API`() {
-            customerApiClientMockStater.stubForGet(
+            customerApiClientMockStater.stubForFindCustomerById(
                 wireMockServer,
                 "5",
                 200,
@@ -258,6 +261,7 @@ class ComponentTest : AbstractComponentTest() {
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isNotFound)
+                .andExpect(jsonPath("$.cause.message").value("The given customer (Customer ID: ${request.customerId}) was not found on Bank API"))
         }
     }
 
@@ -266,7 +270,7 @@ class ComponentTest : AbstractComponentTest() {
     inner class DeleteBank {
         @Test
         fun `should delete a bank successfully`() {
-            customerApiClientMockStater.stubForGet(
+            customerApiClientMockStater.stubForFindCustomerById(
                 wireMockServer,
                 "1",
                 200,
@@ -287,7 +291,7 @@ class ComponentTest : AbstractComponentTest() {
 
         @Test
         fun `should not delete a bank because it was not found on Customer API`() {
-            customerApiClientMockStater.stubForGet(
+            customerApiClientMockStater.stubForFindCustomerById(
                 wireMockServer,
                 "5",
                 404,
@@ -299,11 +303,12 @@ class ComponentTest : AbstractComponentTest() {
             )
             mockMvc.perform(delete("/api/banks/{customerId}", 5))
                 .andExpect(status().isNotFound)
+                .andExpect(jsonPath("$.cause.message").value("The given customer (Customer ID: 5) was not found on Customer API"))
         }
 
         @Test
         fun `should not delete a bank because it was not found on Bank API`() {
-            customerApiClientMockStater.stubForGet(
+            customerApiClientMockStater.stubForFindCustomerById(
                 wireMockServer,
                 "5",
                 200,
@@ -315,11 +320,12 @@ class ComponentTest : AbstractComponentTest() {
             )
             mockMvc.perform(delete("/api/banks/{customerId}", 5))
                 .andExpect(status().isNotFound)
+                .andExpect(jsonPath("$.cause.message").value("The given customer (Customer ID: 5) was not found on Bank API"))
         }
 
         @Test
         fun `should not delete a bank because the deletion failed`() {
-            customerApiClientMockStater.stubForGet(
+            customerApiClientMockStater.stubForFindCustomerById(
                 wireMockServer,
                 "1",
                 200,
@@ -336,6 +342,7 @@ class ComponentTest : AbstractComponentTest() {
             )
             mockMvc.perform(delete("/api/banks/{customerId}", 1))
                 .andExpect(status().isUnprocessableEntity)
+                .andExpect(jsonPath("$.cause.message").value("The deletion failed!"))
         }
     }
 }

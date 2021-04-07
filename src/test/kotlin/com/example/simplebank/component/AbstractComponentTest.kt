@@ -18,7 +18,6 @@ import org.springframework.test.context.jdbc.Sql.ExecutionPhase
 import org.springframework.test.context.jdbc.SqlGroup
 import org.springframework.test.context.junit.jupiter.SpringExtension
 
-@ExtendWith(SpringExtension::class)
 @SpringBootTest(classes = [SimpleBankApplication::class], webEnvironment = WebEnvironment.RANDOM_PORT)
 @Import(value = [CustomerApiClientMockStarter::class])
 @AutoConfigureMockMvc

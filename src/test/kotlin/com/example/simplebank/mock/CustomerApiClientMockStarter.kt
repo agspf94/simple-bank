@@ -8,7 +8,7 @@ import org.springframework.boot.test.context.TestConfiguration
 
 @TestConfiguration
 class CustomerApiClientMockStarter {
-    fun stubForGet(wireMockServer: WireMockServer, url: String, status: Int, json: String) {
+    fun stubForFindCustomerById(wireMockServer: WireMockServer, url: String, status: Int, json: String) {
         wireMockServer.stubFor(
                 get(urlPathEqualTo("/$url"))
                 .willReturn(
