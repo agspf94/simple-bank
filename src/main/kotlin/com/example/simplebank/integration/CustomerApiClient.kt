@@ -2,7 +2,6 @@ package com.example.simplebank.integration
 
 import com.example.simplebank.entity.Customer
 import com.example.simplebank.service.request.DeleteRequest
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.cloud.openfeign.FeignClient
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -17,7 +16,7 @@ interface CustomerApiClient {
     @GetMapping
     fun findAll(): List<Customer>
 
-    @GetMapping
+    @GetMapping("/customer")
     fun findByCustomerId(@RequestParam("customerId") customerId: Int): Customer
 
     @PostMapping

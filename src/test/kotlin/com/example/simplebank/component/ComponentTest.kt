@@ -2,6 +2,7 @@ package com.example.simplebank.component
 
 import com.example.simplebank.controller.request.BankRequest
 import com.example.simplebank.entity.Bank
+import com.example.simplebank.mock.CustomerApiClientMockStarter
 import com.example.simplebank.repository.BankRepository
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.junit.jupiter.api.*
@@ -13,9 +14,8 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 
-@SpringBootTest
-@AutoConfigureMockMvc
-class ComponentTest {
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+class ComponentTest : AbstractComponentTest() {
     @Autowired
     private lateinit var mockMvc: MockMvc
 
@@ -25,8 +25,11 @@ class ComponentTest {
     @Autowired
     private lateinit var bankRepository: BankRepository
 
+    @Autowired
+    private lateinit var customerApiClientMockStater: CustomerApiClientMockStarter
+
     @BeforeEach
-    fun setupMocks() {
+    override fun setupMocks() {
         bankRepository.deleteAll()
         val banks = mutableListOf<Bank>()
         banks.add(Bank(1, 1, 100.0, 1))
@@ -73,6 +76,7 @@ class ComponentTest {
     inner class GetBank {
         @Test
         fun `should get a bank successfully`() {
+            customerApiClientMockStater.stubForGetBankSuccessfully(wireMockServer)
             mockMvc.perform(get("/api/banks/1"))
                 .andExpect(status().isOk)
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
