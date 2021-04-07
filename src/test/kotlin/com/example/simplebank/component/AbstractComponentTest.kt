@@ -11,7 +11,6 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
-import org.springframework.boot.web.server.LocalServerPort
 import org.springframework.context.annotation.Import
 import org.springframework.test.context.junit.jupiter.SpringExtension
 
@@ -20,9 +19,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 @Import(value = [CustomerApiClientMockStarter::class])
 @AutoConfigureMockMvc
 abstract class AbstractComponentTest {
-    @LocalServerPort
-    private val serverPort = 0
-
     protected lateinit var wireMockServer: WireMockServer
 
     @BeforeAll
