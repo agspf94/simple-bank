@@ -31,9 +31,6 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 
-    // MySQL
-    runtimeOnly("mysql:mysql-connector-java")
-
     // JPA
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 

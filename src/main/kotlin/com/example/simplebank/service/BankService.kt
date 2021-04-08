@@ -35,19 +35,19 @@ class BankService(
     }
 
     fun addBank(bankRequest: BankRequest): BankResponse {
-        try {
+        return try {
             val customer = customerApiClient.findByCustomerId(bankRequest.customerId)
             bankRepository
                 .findByCustomerId(customer.customerId)
                 .ifPresent { throw CustomerAlreadyExistsException("The given customer (Customer ID: ${customer.customerId}) already exists on Bank API") }
-            return BankResponse(bankRepository.save(Bank(bankRequest)), customer)
+            BankResponse(bankRepository.save(Bank(bankRequest)), customer)
         } catch (e: FeignException.NotFound) {
             throw CustomerIdNotFoundException("The given customer (Customer ID: ${bankRequest.customerId}) was not found on Customer API")
         }
     }
 
     fun updateBank(bankRequest: BankRequest): BankResponse {
-        try {
+        return try {
             val customer = customerApiClient.findByCustomerId(bankRequest.customerId)
             val bankToBeUpdated = bankRepository
                 .findByCustomerId(customer.customerId)
@@ -55,7 +55,7 @@ class BankService(
                 bankToBeUpdated.accountNumber = bankRequest.accountNumber
                 bankToBeUpdated.balance = bankRequest.balance
                 bankRepository.save(bankToBeUpdated)
-                return BankResponse(bankToBeUpdated, customer)
+                BankResponse(bankToBeUpdated, customer)
         } catch (e: FeignException.NotFound) {
             throw CustomerIdNotFoundException("The given customer (Customer ID: ${bankRequest.customerId}) was not found on Customer API")
         }
@@ -78,10 +78,5 @@ class BankService(
     }
 
     private fun isDeletionValid(bankToDelete: Bank) =
-        customerApiClient.validateDelete(
-            DeleteRequest(
-                bankToDelete.accountNumber,
-                bankToDelete.customerId
-            )
-        ).statusCode == HttpStatus.OK
+        customerApiClient.validateDelete(DeleteRequest(bankToDelete.accountNumber, bankToDelete.customerId)).statusCode == HttpStatus.OK
 }
