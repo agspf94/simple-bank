@@ -20,7 +20,6 @@ class CustomerApiClientMockStarter {
         )
     }
 
-
     fun stubForValidationDelete(wireMockServer: WireMockServer, status: Int, deleteRequest: DeleteRequest) {
         wireMockServer.stubFor(
             post(urlPathEqualTo("/"))
