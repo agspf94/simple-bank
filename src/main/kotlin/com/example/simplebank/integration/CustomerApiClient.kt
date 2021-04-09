@@ -18,3 +18,9 @@ interface CustomerApiClient {
     @PostMapping
     fun validateDelete(@Valid @RequestBody deleteObject: DeleteRequest): ResponseEntity<Unit>
 }
+
+//@Component
+//class CustomerApiClient {
+//    private val url = "\${feign.client.config.customerApiClient.url}"
+//    fun findByCustomerId(customerId: Int): Customer? = RestTemplate().getForObject(url + customerId, Customer::class.java)
+//}
